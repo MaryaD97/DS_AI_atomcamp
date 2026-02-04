@@ -1,115 +1,237 @@
-# Disaster Tweets Classification – NLP Portfolio Project
+## Weekly Logistics Performance & Risk Monitoring Pipeline
 
-## Project Overview
+This project implements an **industry-style logistics monitoring system** that transforms raw order-level data into weekly operational KPIs, classifies delivery risk, and automates insight generation using **Python** and **n8n**.
 
-This project focuses on building a complete Natural Language Processing (NLP) pipeline to classify tweets as either disaster-related or non-disaster-related. The objective is to understand how raw text data can be transformed into meaningful numerical representations and how different modeling approaches perform on a real-world text classification problem.
-
-The project follows a structured learning-based approach, starting from text preprocessing and feature engineering to traditional machine learning models, word embedding exploration, and a simple deep learning model. The emphasis is on clarity, correctness, and conceptual understanding rather than overly complex architectures.
+The goal is to mirror how analytics and operations teams monitor delivery reliability, identify risk early, and communicate actionable insights—moving from static analysis to an automated, decision-ready workflow.
 
 ---
 
-## Dataset Description
+## Project Summary
 
-The dataset is sourced from the Kaggle competition **“Natural Language Processing with Disaster Tweets”**. It consists of short tweets labeled to indicate whether they describe a real disaster or not.
+This repository demonstrates an **end-to-end analytics and automation pipeline** for monitoring logistics performance on a weekly basis.
 
-Each tweet includes:
-- An ID
-- The tweet text
-- Optional keyword and location fields
-- A target label (0 = not a disaster, 1 = disaster)
+The project combines:
 
-Only the training dataset is used for model development and evaluation, following proper machine learning practices.
+- Python-based KPI engineering for structured, reproducible analysis  
+- Rule-based risk classification aligned with operational thresholds  
+- n8n workflow automation to orchestrate data ingestion, logic execution, and downstream outputs  
+- AI-assisted explanation to translate metrics into plain-English insights for stakeholders  
 
-Dataset link:  
-https://www.kaggle.com/competitions/nlp-getting-started/data
 
----
+## Problem Statement
 
-## Project Structure
+In real-world logistics operations, teams face three recurring challenges:
 
-├── data/  
-│   ├── train.csv  
-│   ├── test.csv  
-│   └── sample_submission.csv  
-│  
-├── notebook/  
-│   └── Maryam_Rizwan_nlp.ipynb  
-│  
-└── README.md  
+- Raw data is abundant, but actionable weekly insights are not  
+- Performance issues (late deliveries, regional disruptions) are often detected too late  
+- Manual reporting does not scale and is prone to inconsistency  
 
-The notebook contains the complete end-to-end NLP pipeline, including data preprocessing, feature engineering, modeling, evaluation, and analysis.  
-The `data` folder holds the original dataset files used in the project.  
-All analysis, modeling, and explanations are consolidated in a single, well-documented notebook for clarity and reproducibility.
+Operations teams need:
+
+- Consistent weekly KPIs  
+- Clear risk signals (not just raw metrics)  
+- Automated workflows that reduce manual effort while improving interpretability  
+
+This project addresses these challenges by designing a system that measures, classifies, and explains logistics risk in a way that supports operational decision-making.
 
 ---
 
-## Methodology
+## Solution Overview
 
-The project is structured into the following main steps:
+The solution is structured as a **two-layer system**:
 
-### 1. Understanding the Problem
-The task is framed as a binary text classification problem, with the goal of predicting whether a tweet refers to a real disaster. The informal and noisy nature of social media text makes this a challenging NLP task.
+### Analytics Layer (Python / Jupyter)
 
-### 2. Text Preprocessing
-Text data is cleaned and normalized using steps such as:
-- Lowercasing
-- Removing punctuation and special characters
-- Tokenization
-- Stopword removal
+- Ingest raw logistics data  
+- Engineer weekly KPIs aligned with business questions  
+- Apply deterministic risk classification logic  
+- Output clean, machine-readable datasets  
 
-These steps reduce noise while preserving meaningful information.
+### Automation Layer (n8n)
 
-### 3. Feature Engineering
-Two traditional text representation techniques are implemented:
-- **Bag of Words (BoW)**
-- **TF-IDF**
+- Trigger workflows on a schedule or manual execution  
+- Fetch KPI outputs from a remote repository  
+- Apply business rules and filtering  
+- Generate human-readable risk explanations  
+- Export finalized outputs for reporting or downstream systems  
 
-These representations convert text into numerical feature vectors suitable for machine learning models.
-
-### 4. Word Embedding Exploration
-To move beyond sparse representations, word embeddings are explored using an embedding layer. Dimensionality reduction (PCA) is applied to visualize embeddings and observe semantic relationships between words. This section focuses on understanding how embeddings capture meaning rather than optimizing performance.
-
-### 5. Model Development
-Both traditional and deep learning models are implemented:
-- Logistic Regression (BoW and TF-IDF)
-- Naive Bayes (BoW and TF-IDF)
-- A simple deep learning model using word embeddings
-
-The deep learning model is intentionally kept simple to emphasize the role of embeddings rather than architectural complexity.
-
-### 6. Model Evaluation and Comparison
-Models are evaluated using validation accuracy, classification reports, and confusion matrices. A unified comparison table is used to compare all models in a consistent manner.
+This separation reflects how analytics is typically deployed in industry: **clear data contracts upstream, automation and orchestration downstream**.
 
 ---
 
-## Results Summary
+## Tech Stack
 
-All models achieve comparable performance, with validation accuracy ranging from approximately 78% to 81%. TF-IDF-based models consistently outperform Bag of Words representations. The deep learning model using word embeddings achieves the highest accuracy, though the improvement over traditional models is modest.
+The project uses a focused, production-relevant stack:
 
-This indicates that feature representation plays a crucial role in text classification and that simpler models can remain competitive on smaller, noisy datasets such as tweets.
+### Analytics & Data Processing
+
+- Python  
+- pandas  
+- Jupyter Notebook  
+
+### Workflow Automation
+
+- n8n (scheduled triggers, data transformation, orchestration)  
+
+### AI & Interpretation
+
+- OpenAI Chat Model (used strictly for explanation, not decision-making)  
+
+### Data Formats
+
+- CSV (analytics outputs)  
+- JSON (workflow data exchange)  
+
+
+## KPI Engineering & Risk Design
+
+
+Instead of exploratory metrics, the KPIs were designed to answer **specific operational questions**:
+
+| KPI | Description | Business Relevance |
+|----|-------------|--------------------|
+| `late_delivery_rate` | Share of orders delivered late in a given week | Measures delivery reliability |
+| `avg_delivery_delay` | Average delay (in days/weeks) for late orders | Captures severity of delays |
+| `cancellation_rate` | Proportion of canceled orders | Indicates downstream customer impact |
+| `total_orders` | Total number of orders per week | Represents operational scale |
+| `top_risk_region` | Region with highest late delivery rate | Highlights geographic risk concentration |
+| `top_region_risk_rate` | Late delivery rate of the top risk region | Quantifies regional severity |
+
+These KPIs reflect how logistics managers evaluate performance during **weekly ops reviews**, rather than ad-hoc analysis.
 
 ---
 
-## Steps to Run the Project
+## Risk Classification Logic
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   
-2. Navigate to the project directory:
-cd disaster-tweets-nlp
+Beyond KPI calculation, the project introduces **explicit business logic** to translate metrics into operational signals.
 
-3. Ensure the required Python libraries are installed:
-   - pandas
-   - numpy
-   - scikit-learn
-   - nltk
-   - matplotlib
-   - tensorflow
+Each weekly record is classified into a **risk level**:
 
-4. Open the notebook:
-   - Using Jupyter Notebook or JupyterLab  
-   **OR**
-   - Upload the notebook to Google Colab
+- **LOW** – Performance within acceptable thresholds  
+- **MEDIUM** – Early warning signals; monitor closely  
+- **HIGH** – Requires immediate operational attention  
 
-5. Run the notebook cells sequentially from top to bottom to reproduce the results.
+Risk classification is driven by deterministic rules based on:
+- Late delivery rate thresholds
+- Average delivery delay severity
+- Combined performance patterns across weeks
+
+This approach mirrors industry practice:
+- **Rules define risk**
+- **Analytics supports decisions**
+- **AI explains outcomes**, but does not replace logic
+
+The separation ensures transparency, auditability, and trust in automated decisions.
+
+---
+
+## Workflow Automation with n8n
+
+The second phase of the project operationalizes the analysis using **n8n**, transforming static outputs into an automated pipeline.
+
+The n8n workflow performs the following steps:
+
+1. **Trigger**
+   - Manual execution or scheduled trigger (weekly ops cadence)
+
+2. **Data Ingestion**
+   - Fetches KPI CSV files directly from a GitHub repository
+   - Mimics enterprise patterns where data is sourced from shared repositories or upstream systems
+
+3. **Data Parsing**
+   - Converts CSV files into structured items for processing
+
+4. **Business Logic Execution**
+   - Applies rule-based risk classification
+   - Filters records requiring attention (e.g., HIGH risk weeks)
+
+5. **AI-Powered Risk Explanation**
+   - Uses an AI model to generate concise, plain-English explanations
+   - Explains *why* a week is flagged as risky, without influencing the classification itself
+
+6. **Output Generation**
+   - Produces clean, structured CSV outputs
+   - Ready for reporting, dashboards, or downstream workflows
+
+
+## Outputs & Deliverables
+
+The primary output is a **weekly risk monitoring table**, where each row represents one operational week and includes:
+
+- Engineered performance KPIs
+- A deterministic risk level
+- A human-readable explanation of *why* the risk was assigned
+
+### Example Output Fields
+
+| Field | Description |
+|------|-------------|
+| `year_week` | Weekly time window for monitoring |
+| `late_delivery_rate` | Proportion of late deliveries |
+| `avg_delivery_delay` | Average delay severity |
+| `top_risk_region` | Region contributing most to risk |
+| `risk_level` | LOW / MEDIUM / HIGH classification |
+| `risk_explanation` | AI-generated operational summary |
+
+### Why This Output Matters
+
+This format is intentionally aligned with real operational use cases:
+
+- **Managers** can scan risk levels quickly
+- **Analysts** can trace decisions back to KPIs
+- **Stakeholders** can understand issues without reading raw metrics
+- **Systems** can consume the output programmatically
+
+Instead of dashboards alone, the project produces **portable, structured artifacts** that can plug into alerts, reports, or BI tools.
+
+---
+
+## How to Run the Project
+
+This project is designed to be easy to reproduce and extend.
+
+### 1. Analytics (Python)
+
+1. Clone the repository
+2. Open the Jupyter Notebook in the `/notebooks` directory
+3. Run all cells to:
+   - Load raw logistics data
+   - Generate weekly KPIs
+   - Apply risk classification logic
+4. Export the final CSV outputs
+
+The notebook is written as a **production-style analytics script**, not an exploratory notebook.
+
+### 2. Automation (n8n)
+
+1. Import the provided n8n workflow JSON
+2. Ensure the workflow nodes are connected in the documented order
+3. Configure:
+   - GitHub raw file URL (HTTP Request node)
+   - Trigger type (manual or scheduled)
+4. Execute the workflow to:
+   - Fetch KPI data
+   - Apply logic and filtering
+   - Generate AI explanations
+   - Export final CSV outputs
+
+No local file system access is required; the workflow operates entirely on hosted data.
+
+---
+
+## Key Learning Outcomes & Industry Alignment
+
+This project demonstrates a transition from **learning tools** to **thinking like an analytics engineer**.
+
+Key competencies showcased:
+
+- Designing KPIs around business questions
+- Translating metrics into operational risk signals
+- Writing deterministic, auditable business logic
+- Automating analytics workflows using n8n
+- Using AI responsibly to enhance interpretability, not decision-making
+- Producing clean data contracts for downstream systems
+
+Overall, the project reflects how modern data and AI teams operate:
+**Python for logic, automation for scale, and AI for communication**.
+
